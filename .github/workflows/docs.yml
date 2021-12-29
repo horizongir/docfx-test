@@ -39,5 +39,5 @@ jobs:
           git config user.name github-actions
           git config user.email github-actions@github.com
           git add .
-          git commit --reset-author --amend -m "Deploy docs website from github actions"
+          git commit --reset-author --amend -m "Deploy docs website"
           git push --force origin gh-pages

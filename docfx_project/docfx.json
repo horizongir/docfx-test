@@ -33,8 +33,7 @@
     "resource": [
       {
         "files": [
-          "images/**",
-          ".nojekyll"
+          "images/**"
         ]
       }
     ],

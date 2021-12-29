@@ -1,49 +1,36 @@
-# This is a basic workflow to help you get started with Actions
-
+# Builds and publishes the documentation website to gh-pages branch
 name: Build docs
 
-# Controls when the workflow will run
 on:
-  # Triggers the workflow on push or pull request events but only for the main branch
   push:
     branches: [ main ]
-
-  # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
   build:
-    # The type of runner that the job will run on
     runs-on: ubuntu-latest
-
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
 
-      # Runs a single command using the runners shell
+      # Build static site content using DocFX
       - uses: nikeee/docfx-action@v1.0.0
         name: Build Documentation
         with:
          args: docfx_project/docfx.json
          
-      # Upload _site directory artifact
-      - name: Upload Documentation
+      # Archive site content
+      - name: Archive Documentation
         uses: actions/upload-artifact@v2
         with:
           name: site
           path: docfx_project/_site
           
       - name: Checkout gh-pages
-        if: ${{ github.ref == 'refs/heads/main' }}
         uses: actions/checkout@v2
         with:
           ref: gh-pages
           path: gh-pages
       - name: Publish to github pages
-        if: ${{ github.ref == 'refs/heads/main' }}
         run: |
           cd gh-pages
           rm -rf *
@@ -52,5 +39,5 @@ jobs:
           git config user.name github-actions
           git config user.email github-actions@github.com
           git add .
-          git commit --reset-author --amend -m "Update from github actions"
+          git commit --reset-author --amend -m "Deploy docs website from github actions"
           git push --force origin gh-pages
